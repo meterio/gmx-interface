@@ -1,15 +1,9 @@
-import { ARBITRUM, AVALANCHE } from "./chains";
+import {  METERTEST } from "./chains";
 
 export const SUBGRAPH_URLS = {
-  [ARBITRUM]: {
-    stats: "https://api.thegraph.com/subgraphs/name/gmx-io/gmx-stats",
-    referrals: "https://api.thegraph.com/subgraphs/name/gmx-io/gmx-arbitrum-referrals",
-    nissohVault: "https://api.thegraph.com/subgraphs/name/nissoh/gmx-vault",
-  },
-
-  [AVALANCHE]: {
-    stats: "https://api.thegraph.com/subgraphs/name/gmx-io/gmx-avalanche-stats",
-    referrals: "https://api.thegraph.com/subgraphs/name/gmx-io/gmx-avalanche-referrals",
+  [METERTEST]: {
+    stats: "http://graphtest.meter.io:8000/subgraphs/name/gmx/gmx-stats",
+    referrals: "http://graphtest.meter.io:8000/subgraphs/name/gmx/gmx-referrals"
   },
 
   common: {

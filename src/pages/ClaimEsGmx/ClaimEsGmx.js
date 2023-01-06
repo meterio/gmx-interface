@@ -17,7 +17,7 @@ import arbitrumIcon from "img/ic_arbitrum_96.svg";
 import avaIcon from "img/ic_avalanche_96.svg";
 
 import { Trans, t } from "@lingui/macro";
-import { ARBITRUM, AVALANCHE } from "config/chains";
+import { METERTEST } from "config/chains";
 import { callContract, contractFetcher } from "lib/contracts";
 import { bigNumberify, formatAmount, formatAmountFree, parseValue } from "lib/numbers";
 import { useChainId } from "lib/chains";
@@ -132,12 +132,10 @@ export default function ClaimEsGmx({ setPendingTxns }) {
   const [isClaiming, setIsClaiming] = useState(false);
   const [value, setValue] = useState("");
 
-  const isArbitrum = chainId === ARBITRUM;
-
   const esGmxIouAddress = getContract(chainId, "ES_GMX_IOU");
 
   const { data: esGmxIouBalance } = useSWR(
-    isArbitrum && [
+    [
       `ClaimEsGmx:esGmxIouBalance:${active}`,
       chainId,
       esGmxIouAddress,
@@ -149,40 +147,38 @@ export default function ClaimEsGmx({ setPendingTxns }) {
     }
   );
 
-  const arbRewardReaderAddress = getContract(ARBITRUM, "RewardReader");
-  const avaxRewardReaderAddress = getContract(AVALANCHE, "RewardReader");
+  const metertestRewardReaderAddress = getContract(METERTEST, "RewardReader");
 
-  const arbVesterAdddresses = [getContract(ARBITRUM, "GmxVester"), getContract(ARBITRUM, "GlpVester")];
-  const avaxVesterAdddresses = [getContract(AVALANCHE, "GmxVester"), getContract(AVALANCHE, "GlpVester")];
+  const metertestVesterAdddresses = [getContract(METERTEST, "GmxVester"), getContract(METERTEST, "GlpVester")];
 
   const { data: arbVestingInfo } = useSWR(
     [
       `StakeV2:vestingInfo:${active}`,
-      ARBITRUM,
-      arbRewardReaderAddress,
+      METERTEST,
+      metertestRewardReaderAddress,
       "getVestingInfoV2",
       account || PLACEHOLDER_ACCOUNT,
     ],
     {
-      fetcher: contractFetcher(undefined, RewardReader, [arbVesterAdddresses]),
+      fetcher: contractFetcher(undefined, RewardReader, [metertestVesterAdddresses]),
     }
   );
 
-  const { data: avaxVestingInfo } = useSWR(
-    [
-      `StakeV2:vestingInfo:${active}`,
-      AVALANCHE,
-      avaxRewardReaderAddress,
-      "getVestingInfoV2",
-      account || PLACEHOLDER_ACCOUNT,
-    ],
-    {
-      fetcher: contractFetcher(undefined, RewardReader, [avaxVesterAdddresses]),
-    }
-  );
+  // const { data: avaxVestingInfo } = useSWR(
+  //   [
+  //     `StakeV2:vestingInfo:${active}`,
+  //     AVALANCHE,
+  //     avaxRewardReaderAddress,
+  //     "getVestingInfoV2",
+  //     account || PLACEHOLDER_ACCOUNT,
+  //   ],
+  //   {
+  //     fetcher: contractFetcher(undefined, RewardReader, [avaxVesterAdddresses]),
+  //   }
+  // );
 
   const arbVestingData = getVestingDataV2(arbVestingInfo);
-  const avaxVestingData = getVestingDataV2(avaxVestingInfo);
+  // const avaxVestingData = getVestingDataV2(avaxVestingInfo);
 
   let amount = parseValue(value, 18);
 
@@ -227,33 +223,33 @@ export default function ClaimEsGmx({ setPendingTxns }) {
     stakingToken = "GLP";
   }
 
-  if (selectedOption === VEST_WITH_GMX_AVAX && avaxVestingData) {
-    const result = getVestingValues({
-      minRatio: bigNumberify(4),
-      amount,
-      vestingDataItem: avaxVestingData.gmxVester,
-    });
+  // if (selectedOption === VEST_WITH_GMX_AVAX) {
+  //   const result = getVestingValues({
+  //     minRatio: bigNumberify(4),
+  //     amount,
+  //     vestingDataItem: avaxVestingData.gmxVester,
+  //   });
 
-    if (result) {
-      ({ maxVestableAmount, currentRatio, nextMaxVestableEsGmx, nextRatio, initialStakingAmount, nextStakingAmount } =
-        result);
-    }
-  }
+  //   if (result) {
+  //     ({ maxVestableAmount, currentRatio, nextMaxVestableEsGmx, nextRatio, initialStakingAmount, nextStakingAmount } =
+  //       result);
+  //   }
+  // }
 
-  if (selectedOption === VEST_WITH_GLP_AVAX && avaxVestingData) {
-    const result = getVestingValues({
-      minRatio: bigNumberify(320),
-      amount,
-      vestingDataItem: avaxVestingData.glpVester,
-    });
+  // if (selectedOption === VEST_WITH_GLP_AVAX && avaxVestingData) {
+  //   const result = getVestingValues({
+  //     minRatio: bigNumberify(320),
+  //     amount,
+  //     vestingDataItem: avaxVestingData.glpVester,
+  //   });
 
-    if (result) {
-      ({ maxVestableAmount, currentRatio, nextMaxVestableEsGmx, nextRatio, initialStakingAmount, nextStakingAmount } =
-        result);
-    }
+  //   if (result) {
+  //     ({ maxVestableAmount, currentRatio, nextMaxVestableEsGmx, nextRatio, initialStakingAmount, nextStakingAmount } =
+  //       result);
+  //   }
 
-    stakingToken = "GLP";
-  }
+  //   stakingToken = "GLP";
+  // }
 
   const getError = () => {
     if (!active) {
@@ -333,13 +329,10 @@ export default function ClaimEsGmx({ setPendingTxns }) {
         <div className="Page-title">
           <Trans>Claim esGMX</Trans>
         </div>
-        {!isArbitrum && (
           <div className="Page-description">
             <br />
-            <Trans>Please switch your network to Arbitrum.</Trans>
+            <Trans>Please switch your network to Metertest.</Trans>
           </div>
-        )}
-        {isArbitrum && (
           <div>
             <div className="Page-description">
               <br />
@@ -456,7 +449,6 @@ export default function ClaimEsGmx({ setPendingTxns }) {
               </button>
             </div>
           </div>
-        )}
       </div>
     </div>
   );

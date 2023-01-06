@@ -4,7 +4,7 @@ import "./BuyGMX.css";
 import { useWeb3React } from "@web3-react/core";
 import { Trans, t } from "@lingui/macro";
 import Button from "components/Common/Button";
-import { ARBITRUM, AVALANCHE, getChainName, getConstant } from "config/chains";
+import { METERTEST, getChainName, getConstant } from "config/chains";
 import { switchNetwork } from "lib/wallets";
 import { useChainId } from "lib/chains";
 import Card from "components/Common/Card";
@@ -22,7 +22,6 @@ import { CENTRALISED_EXCHANGES, DECENTRALISED_AGGRIGATORS, EXTERNAL_LINKS, TRANS
 
 export default function BuyGMX() {
   const { chainId } = useChainId();
-  const isArbitrum = chainId === ARBITRUM;
   const { active } = useWeb3React();
   const nativeTokenSymbol = getConstant(chainId, "nativeTokenSymbol");
   const externalLinks = EXTERNAL_LINKS[chainId];
@@ -49,8 +48,8 @@ export default function BuyGMX() {
               <Trans>Choose to buy from decentralized or centralized exchanges.</Trans>
               <br />
               <Trans>
-                To purchase GMX on the {isArbitrum ? "Avalanche" : "Arbitrum"} blockchain, please{" "}
-                <span onClick={() => onNetworkSelect(isArbitrum ? AVALANCHE : ARBITRUM)}>change your network</span>.
+                To purchase GMX on the Metertest blockchain, please{" "}
+                <span onClick={() => onNetworkSelect(METERTEST)}>change your network</span>.
               </Trans>
             </div>
           </div>
@@ -60,45 +59,26 @@ export default function BuyGMX() {
           <CentralisedExchanges chainId={chainId} externalLinks={externalLinks} />
         </div>
 
-        {isArbitrum ? (
           <div className="section-title-block mt-top">
             <div className="section-title-content">
               <div className="Page-title">
-                <Trans>Buy or Transfer ETH to Arbitrum</Trans>
+                <Trans>Buy or Transfer MTR to Metertest</Trans>
               </div>
               <div className="Page-description">
-                <Trans>Buy ETH directly to Arbitrum or transfer it there.</Trans>
+                <Trans>Buy MTR directly to Metertest or transfer it there.</Trans>
               </div>
             </div>
           </div>
-        ) : (
-          <div className="section-title-block mt-top">
-            <div className="section-title-content">
-              <div className="Page-title">
-                <Trans>Buy or Transfer AVAX to Avalanche</Trans>
-              </div>
-              <div className="Page-description">
-                <Trans>Buy AVAX directly to Avalanche or transfer it there.</Trans>
-              </div>
-            </div>
-          </div>
-        )}
 
         <div className="cards-row">
           <Card title={t`Buy ${nativeTokenSymbol}`}>
             <div className="App-card-content">
               <div className="BuyGMXGLP-description">
-                {isArbitrum ? (
                   <Trans>
-                    You can buy ETH directly on{" "}
-                    <ExternalLink href={externalLinks.networkWebsite}>Arbitrum</ExternalLink> using these options:
+                    You can buy MTR directly on{" "}
+                    <ExternalLink href={externalLinks.networkWebsite}>Metertest</ExternalLink> using these options:
                   </Trans>
-                ) : (
-                  <Trans>
-                    You can buy AVAX directly on{" "}
-                    <ExternalLink href={externalLinks.networkWebsite}>Avalanche</ExternalLink> using these options:
-                  </Trans>
-                )}
+               
               </div>
               <div className="buttons-group">
                 <Button href={externalLinks.bungee} imgSrc={Bungee}>
@@ -115,15 +95,10 @@ export default function BuyGMX() {
           </Card>
           <Card title={t`Transfer ${nativeTokenSymbol}`}>
             <div className="App-card-content">
-              {isArbitrum ? (
                 <div className="BuyGMXGLP-description">
-                  <Trans>You can transfer ETH from other networks to Arbitrum using any of the below options:</Trans>
+                  <Trans>You can transfer ETH from other networks to Metertest using any of the below options:</Trans>
                 </div>
-              ) : (
-                <div className="BuyGMXGLP-description">
-                  <Trans>You can transfer AVAX from other networks to Avalanche using any of the below options:</Trans>
-                </div>
-              )}
+              
               <div className="buttons-group">
                 {TRANSFER_EXCHANGES.filter((e) => e.networks.includes(chainId)).map((exchange) => {
                   const icon = importImage(exchange.icon) || "";
@@ -144,14 +119,12 @@ export default function BuyGMX() {
 }
 
 function DecentralisedExchanges({ chainId, externalLinks }) {
-  const isArbitrum = chainId === ARBITRUM;
   return (
     <Card title={t`Buy GMX from a Decentralized Exchange`}>
       <div className="App-card-content">
-        {isArbitrum ? (
           <div className="exchange-info-group">
             <div className="BuyGMXGLP-description">
-              <Trans>Buy GMX from Uniswap (make sure to select Arbitrum):</Trans>
+              <Trans>Buy GMX from Uniswap (make sure to select Metertest):</Trans>
             </div>
             <div className="buttons-group col-1">
               <Button imgSrc={Uniswap} href={externalLinks.buyGmx.uniswap}>
@@ -159,18 +132,7 @@ function DecentralisedExchanges({ chainId, externalLinks }) {
               </Button>
             </div>
           </div>
-        ) : (
-          <div className="exchange-info-group">
-            <div className="BuyGMXGLP-description">
-              <Trans>Buy GMX from Traderjoe:</Trans>
-            </div>
-            <div className="buttons-group col-1">
-              <Button imgSrc={Traderjoe} href={externalLinks.buyGmx.traderjoe}>
-                <Trans>TraderJoe</Trans>
-              </Button>
-            </div>
-          </div>
-        )}
+        
         <div className="exchange-info-group">
           <div className="BuyGMXGLP-description">
             <Trans>Buy GMX using Decentralized Exchange Aggregators:</Trans>
@@ -200,7 +162,6 @@ function DecentralisedExchanges({ chainId, externalLinks }) {
             </Button>
           </div>
         </div>
-        {isArbitrum && (
           <div className="exchange-info-group">
             <div className="BuyGMXGLP-description">
               <Trans>GMX bonds can be bought on Olympus Pro with a discount and a small vesting period:</Trans>
@@ -211,7 +172,6 @@ function DecentralisedExchanges({ chainId, externalLinks }) {
               </Button>
             </div>
           </div>
-        )}
       </div>
     </Card>
   );

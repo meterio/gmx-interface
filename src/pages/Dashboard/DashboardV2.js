@@ -34,8 +34,8 @@ import "./DashboardV2.css";
 import gmx40Icon from "img/ic_gmx_40.svg";
 import glp40Icon from "img/ic_glp_40.svg";
 import avalanche16Icon from "img/ic_avalanche_16.svg";
-import arbitrum16Icon from "img/ic_arbitrum_16.svg";
-import arbitrum24Icon from "img/ic_arbitrum_24.svg";
+import metertest16Icon from "img/ic_arbitrum_16.svg";
+import metertest24Icon from "img/ic_arbitrum_24.svg";
 import avalanche24Icon from "img/ic_avalanche_24.svg";
 
 import AssetDropdown from "./AssetDropdown";
@@ -44,7 +44,7 @@ import SEO from "components/Common/SEO";
 import useTotalVolume from "domain/useTotalVolume";
 import StatsTooltip from "components/StatsTooltip/StatsTooltip";
 import StatsTooltipRow from "components/StatsTooltip/StatsTooltipRow";
-import { ARBITRUM, AVALANCHE, getChainName } from "config/chains";
+import { METERTEST, getChainName } from "config/chains";
 import { getServerUrl } from "config/backend";
 import { contractFetcher } from "lib/contracts";
 import { useInfoTokens } from "domain/tokens";
@@ -52,7 +52,7 @@ import { getTokenBySymbol, getWhitelistedTokens, GLP_POOL_COLORS } from "config/
 import { bigNumberify, expandDecimals, formatAmount, formatKeyAmount, numberWithCommas } from "lib/numbers";
 import { useChainId } from "lib/chains";
 import { formatDate } from "lib/dates";
-const ACTIVE_CHAIN_IDS = [ARBITRUM, AVALANCHE];
+const ACTIVE_CHAIN_IDS = [METERTEST];
 
 const { AddressZero } = ethers.constants;
 
@@ -194,13 +194,11 @@ export default function DashboardV2() {
   );
 
   const { infoTokens } = useInfoTokens(library, chainId, active, undefined, undefined);
-  const { infoTokens: infoTokensArbitrum } = useInfoTokens(null, ARBITRUM, active, undefined, undefined);
-  const { infoTokens: infoTokensAvax } = useInfoTokens(null, AVALANCHE, active, undefined, undefined);
+  const { infoTokens: infoTokensMetertest } = useInfoTokens(null, METERTEST, active, undefined, undefined);
+  // const { infoTokens: infoTokensAvax } = useInfoTokens(null, AVALANCHE, active, undefined, undefined);
 
   const { data: currentFees } = useSWR(
-    infoTokensArbitrum[AddressZero].contractMinPrice && infoTokensAvax[AddressZero].contractMinPrice
-      ? "Dashboard:currentFees"
-      : null,
+    infoTokensMetertest[AddressZero].contractMinPrice ? "Dashboard:currentFees" : null,
     {
       fetcher: () => {
         return Promise.all(
@@ -219,7 +217,8 @@ export default function DashboardV2() {
               const feeUSD = getCurrentFeesUsd(
                 getWhitelistedTokenAddresses(ACTIVE_CHAIN_IDS[i]),
                 cv,
-                ACTIVE_CHAIN_IDS[i] === ARBITRUM ? infoTokensArbitrum : infoTokensAvax
+                infoTokensMetertest
+                // ACTIVE_CHAIN_IDS[i] = infoTokensMetertest
               );
               acc[ACTIVE_CHAIN_IDS[i]] = feeUSD;
               acc.total = acc.total.add(feeUSD);
@@ -235,7 +234,7 @@ export default function DashboardV2() {
   const { data: feesSummaryByChain } = useFeesSummary();
   const feesSummary = feesSummaryByChain[chainId];
 
-  const eth = infoTokens[getTokenBySymbol(chainId, "ETH").address];
+  const eth = infoTokens[getTokenBySymbol(chainId, "MTR").address];
   const shouldIncludeCurrrentFees =
     feesSummaryByChain[chainId].lastUpdatedAt &&
     parseInt(Date.now() / 1000) - feesSummaryByChain[chainId].lastUpdatedAt > 60 * 60;
@@ -244,7 +243,6 @@ export default function DashboardV2() {
     if (shouldIncludeCurrrentFees && currentFees && currentFees[chainId]) {
       return currentFees[chainId].div(expandDecimals(1, USD_DECIMALS)).add(feesSummaryByChain[chainId].totalFees || 0);
     }
-
     return feesSummaryByChain[chainId].totalFees || 0;
   })
     .map((v) => Math.round(v))
@@ -257,15 +255,15 @@ export default function DashboardV2() {
       { total: 0 }
     );
 
-  const { gmxPrice, gmxPriceFromArbitrum, gmxPriceFromAvalanche } = useGmxPrice(
+  const { gmxPrice, gmxPriceFromMetertest, gmxPriceFromAvalanche } = useGmxPrice(
     chainId,
-    { arbitrum: chainId === ARBITRUM ? library : undefined },
+    { metertest: chainId === METERTEST ? library : undefined },
     active
   );
 
   let { total: totalGmxInLiquidity } = useTotalGmxInLiquidity(chainId, active);
 
-  let { avax: avaxStakedGmx, arbitrum: arbitrumStakedGmx, total: totalStakedGmx } = useTotalGmxStaked();
+  let { avax: avaxStakedGmx, metertest: metertestStakedGmx, total: totalStakedGmx } = useTotalGmxStaked();
 
   let gmxMarketCap;
   if (gmxPrice && totalGmxSupply) {
@@ -408,9 +406,10 @@ export default function DashboardV2() {
   };
 
   let stakedPercent = 0;
-
-  if (totalGmxSupply && !totalGmxSupply.isZero() && !totalStakedGmx.isZero()) {
-    stakedPercent = totalStakedGmx.mul(100).div(totalGmxSupply).toNumber();
+  if (totalGmxSupply) {
+    if (!totalGmxSupply.isZero() && !totalStakedGmx.isZero()) {
+      stakedPercent = totalStakedGmx.mul(100).div(totalGmxSupply).toNumber();
+    }
   }
 
   let liquidityPercent = 0;
@@ -439,7 +438,7 @@ export default function DashboardV2() {
     },
   ];
 
-  const totalStatsStartDate = chainId === AVALANCHE ? t`06 Jan 2022` : t`01 Sep 2021`;
+  const totalStatsStartDate = t`06 Jan 2022`;
 
   let stableGlp = 0;
   let totalGlp = 0;
@@ -517,17 +516,17 @@ export default function DashboardV2() {
           <div className="section-title-icon"></div>
           <div className="section-title-content">
             <div className="Page-title">
-              <Trans>Stats</Trans> {chainId === AVALANCHE && <img src={avalanche24Icon} alt="avalanche24Icon" />}
-              {chainId === ARBITRUM && <img src={arbitrum24Icon} alt="arbitrum24Icon" />}
+              <Trans>Stats</Trans> <img src={avalanche24Icon} alt="avalanche24Icon" />
+              {chainId === METERTEST && <img src={metertest24Icon} alt="metertest24Icon" />}
             </div>
             <div className="Page-description">
               <Trans>
                 {chainName} Total Stats start from {totalStatsStartDate}.<br /> For detailed stats:
               </Trans>{" "}
-              {chainId === ARBITRUM && <ExternalLink href="https://stats.gmx.io">https://stats.gmx.io</ExternalLink>}
-              {chainId === AVALANCHE && (
+              {chainId === METERTEST && <ExternalLink href="https://stats.gmx.io">https://stats.gmx.io</ExternalLink>}
+              {/* {chainId === AVALANCHE && (
                 <ExternalLink href="https://stats.gmx.io/avalanche">https://stats.gmx.io/avalanche</ExternalLink>
-              )}
+              )} */}
               .
             </div>
           </div>
@@ -578,8 +577,7 @@ export default function DashboardV2() {
                       renderContent={() => (
                         <StatsTooltip
                           title={t`Volume`}
-                          arbitrumValue={currentVolumeInfo?.[ARBITRUM].totalVolume}
-                          avaxValue={currentVolumeInfo?.[AVALANCHE].totalVolume}
+                          metertestValue={currentVolumeInfo?.[METERTEST].totalVolume}
                           total={currentVolumeInfo?.totalVolume}
                         />
                       )}
@@ -603,8 +601,7 @@ export default function DashboardV2() {
                       renderContent={() => (
                         <StatsTooltip
                           title={t`Long Positions`}
-                          arbitrumValue={positionStatsInfo?.[ARBITRUM].totalLongPositionSizes}
-                          avaxValue={positionStatsInfo?.[AVALANCHE].totalLongPositionSizes}
+                          metertestValue={positionStatsInfo?.[METERTEST].totalLongPositionSizes}
                           total={positionStatsInfo?.totalLongPositionSizes}
                         />
                       )}
@@ -628,8 +625,7 @@ export default function DashboardV2() {
                       renderContent={() => (
                         <StatsTooltip
                           title={t`Short Positions`}
-                          arbitrumValue={positionStatsInfo?.[ARBITRUM].totalShortPositionSizes}
-                          avaxValue={positionStatsInfo?.[AVALANCHE].totalShortPositionSizes}
+                          metertestValue={positionStatsInfo?.[METERTEST].totalShortPositionSizes}
                           total={positionStatsInfo?.totalShortPositionSizes}
                         />
                       )}
@@ -649,8 +645,7 @@ export default function DashboardV2() {
                         renderContent={() => (
                           <StatsTooltip
                             title={t`Fees`}
-                            arbitrumValue={currentFees?.[ARBITRUM]}
-                            avaxValue={currentFees?.[AVALANCHE]}
+                            metertestValue={currentFees?.[METERTEST]}
                             total={currentFees?.total}
                           />
                         )}
@@ -678,8 +673,7 @@ export default function DashboardV2() {
                       renderContent={() => (
                         <StatsTooltip
                           title={t`Total Fees`}
-                          arbitrumValue={totalFees?.[ARBITRUM]}
-                          avaxValue={totalFees?.[AVALANCHE]}
+                          metertestValue={totalFees?.[METERTEST]}
                           total={totalFees?.total}
                           decimalsForConversion={0}
                         />
@@ -699,8 +693,7 @@ export default function DashboardV2() {
                       renderContent={() => (
                         <StatsTooltip
                           title={t`Total Volume`}
-                          arbitrumValue={totalVolume?.[ARBITRUM]}
-                          avaxValue={totalVolume?.[AVALANCHE]}
+                          metertestValue={totalVolume?.[METERTEST]}
                           total={totalVolume?.total}
                         />
                       )}
@@ -718,8 +711,8 @@ export default function DashboardV2() {
           </div>
           <div className="Tab-title-section">
             <div className="Page-title">
-              <Trans>Tokens</Trans> {chainId === AVALANCHE && <img src={avalanche24Icon} alt="avalanche24Icon" />}
-              {chainId === ARBITRUM && <img src={arbitrum24Icon} alt="arbitrum24Icon" />}
+              <Trans>Tokens</Trans> <img src={avalanche24Icon} alt="avalanche24Icon" />
+              {chainId === METERTEST && <img src={metertest24Icon} alt="metertest24Icon" />}
             </div>
             <div className="Page-description">
               <Trans>Platform and GLP index tokens.</Trans>
@@ -759,8 +752,8 @@ export default function DashboardV2() {
                             renderContent={() => (
                               <>
                                 <StatsTooltipRow
-                                  label={t`Price on Arbitrum`}
-                                  value={formatAmount(gmxPriceFromArbitrum, USD_DECIMALS, 2, true)}
+                                  label={t`Price on Metertest`}
+                                  value={formatAmount(gmxPriceFromMetertest, USD_DECIMALS, 2, true)}
                                   showDollar={true}
                                 />
                                 <StatsTooltipRow
@@ -792,7 +785,7 @@ export default function DashboardV2() {
                           renderContent={() => (
                             <StatsTooltip
                               title={t`Staked`}
-                              arbitrumValue={arbitrumStakedGmx}
+                              metertestValue={metertestStakedGmx}
                               avaxValue={avaxStakedGmx}
                               total={totalStakedGmx}
                               decimalsForConversion={GMX_DECIMALS}
@@ -858,8 +851,8 @@ export default function DashboardV2() {
                     <div className="App-card-title-mark">
                       <div className="App-card-title-mark-icon">
                         <img src={glp40Icon} alt="glp40Icon" />
-                        {chainId === ARBITRUM ? (
-                          <img src={arbitrum16Icon} alt={t`Arbitrum Icon`} className="selected-network-symbol" />
+                        {chainId === METERTEST ? (
+                          <img src={metertest16Icon} alt={t`Metertest Icon`} className="selected-network-symbol" />
                         ) : (
                           <img src={avalanche16Icon} alt={t`Avalanche Icon`} className="selected-network-symbol" />
                         )}
@@ -953,8 +946,7 @@ export default function DashboardV2() {
             <div className="token-table-wrapper App-card">
               <div className="App-card-title">
                 <Trans>GLP Index Composition</Trans>{" "}
-                {chainId === AVALANCHE && <img src={avalanche16Icon} alt={t`Avalanche Icon`} />}
-                {chainId === ARBITRUM && <img src={arbitrum16Icon} alt={t`Arbitrum Icon`} />}
+                {chainId === METERTEST && <img src={metertest16Icon} alt={t`Metertest Icon`} />}
               </div>
               <div className="App-card-divider"></div>
               <table className="token-table">

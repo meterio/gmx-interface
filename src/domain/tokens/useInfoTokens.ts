@@ -32,9 +32,21 @@ export function useInfoTokens(
 
   const whitelistedTokens = getWhitelistedTokens(chainId);
   const whitelistedTokenAddresses = whitelistedTokens.map((token) => token.address);
-
+  // 0x5AE9F9377653b7D4A5e69A7b880ad7D3C6944CaD
+  // 0x783fCA88c24a6a6a710375a51Ab18821FcEF2210
+  // 0xfAC315d105E5A7fe2174B3EB1f95C257A9A5e271
+  // 1000000000000000000
+  // 0x8a419ef4941355476cf04933e90bf3bbf2f73814
+  // 0x0000000000000000000000000000000000000000
+  // 0xfAC315d105E5A7fe2174B3EB1f95C257A9A5e271
   const { data: vaultTokenInfo } = useSWR<BigNumber[], any>(
-    [`useInfoTokens:${active}`, chainId, vaultReaderAddress, "getVaultTokenInfoV4"],
+    [`useInfoTokens:${active},${[
+      vaultAddress,
+      positionRouterAddress,
+      nativeTokenAddress,
+      expandDecimals(1, 18),
+      whitelistedTokenAddresses,
+    ]}`, chainId, vaultReaderAddress, "getVaultTokenInfoV4"],
     {
       fetcher: contractFetcher(library, VaultReader, [
         vaultAddress,

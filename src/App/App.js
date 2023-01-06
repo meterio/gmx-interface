@@ -70,7 +70,7 @@ import { I18nProvider } from "@lingui/react";
 import { Trans, t } from "@lingui/macro";
 import { defaultLocale, dynamicActivate } from "lib/i18n";
 import { Header } from "components/Header/Header";
-import { ARBITRUM, AVALANCHE, getAlchemyWsUrl, getExplorerUrl } from "config/chains";
+import {  METERTEST, getAlchemyWsUrl, getExplorerUrl } from "config/chains";
 import { useLocalStorageSerializeKey } from "lib/localStorage";
 import { helperToast } from "lib/helperToast";
 import {
@@ -121,17 +121,15 @@ const arbWsProvider = new ethers.providers.WebSocketProvider(getAlchemyWsUrl());
 
 const avaxWsProvider = new ethers.providers.JsonRpcProvider("https://api.avax.network/ext/bc/C/rpc");
 avaxWsProvider.pollingInterval = 2000;
+const metertestWsProvider = new ethers.providers.JsonRpcProvider("https://rpctest.meter.io");
+metertestWsProvider.pollingInterval = 2000;
 
 function getWsProvider(active, chainId) {
   if (!active) {
     return;
   }
-  if (chainId === ARBITRUM) {
-    return arbWsProvider;
-  }
-
-  if (chainId === AVALANCHE) {
-    return avaxWsProvider;
+  if (chainId === METERTEST) {
+    return metertestWsProvider;
   }
 }
 
@@ -389,7 +387,7 @@ function FullApp() {
   const positionRouterAddress = getContract(chainId, "PositionRouter");
 
   useEffect(() => {
-    const wsVaultAbi = chainId === ARBITRUM ? VaultV2.abi : VaultV2b.abi;
+    const wsVaultAbi =  VaultV2.abi // VaultV2b.abi;
     const wsProvider = getWsProvider(active, chainId);
     if (!wsProvider) {
       return;

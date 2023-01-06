@@ -42,7 +42,7 @@ import {
   USDG_DECIMALS,
   MAX_ALLOWED_LEVERAGE,
 } from "lib/legacy";
-import { ARBITRUM, AVALANCHE, getChainName, getConstant, IS_NETWORK_DISABLED, isSupportedChain } from "config/chains";
+import { getChainName, getConstant, IS_NETWORK_DISABLED, isSupportedChain } from "config/chains";
 import * as Api from "domain/legacy";
 import { getContract } from "config/contracts";
 
@@ -195,12 +195,6 @@ export default function SwapBox(props) {
   const isSwap = swapOption === SWAP;
 
   const getLeaderboardLink = () => {
-    if (chainId === ARBITRUM) {
-      return "https://www.gmx.house/arbitrum/leaderboard";
-    }
-    if (chainId === AVALANCHE) {
-      return "https://www.gmx.house/avalanche/leaderboard";
-    }
     return "https://www.gmx.house";
   };
 
@@ -1557,7 +1551,7 @@ export default function SwapBox(props) {
       successMsg,
       // for Arbitrum, sometimes the successMsg shows after the position has already been executed
       // hide the success message for Arbitrum as a workaround
-      hideSuccessMsg: chainId === ARBITRUM,
+      hideSuccessMsg: false,
     })
       .then(async () => {
         setIsConfirming(false);

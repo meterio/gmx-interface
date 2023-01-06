@@ -12,7 +12,7 @@ import ExternalLink from "components/ExternalLink/ExternalLink";
 import { ICONLINKS, PLATFORM_TOKENS } from "config/tokens";
 import { addTokenToMetamask } from "lib/wallets";
 import { useChainId } from "lib/chains";
-import { ARBITRUM } from "config/chains";
+import { METERTEST } from "config/chains";
 import { Token } from "domain/tokens";
 
 type Props = {
@@ -23,7 +23,7 @@ type Props = {
 function AssetDropdown({ assetSymbol, assetInfo }: Props) {
   const { active } = useWeb3React();
   const { chainId } = useChainId();
-  let { coingecko, arbitrum, avalanche, reserves } = ICONLINKS[chainId][assetSymbol] || {};
+  let { coingecko, metertest, avalanche, reserves } = ICONLINKS[chainId][assetSymbol] || {};
   const unavailableTokenSymbols =
     {
       42161: ["ETH"],
@@ -40,7 +40,7 @@ function AssetDropdown({ assetSymbol, assetInfo }: Props) {
           <>
             {reserves && assetSymbol === "GLP" && (
               <ExternalLink href={reserves} className="asset-item">
-                <img src={chainId === ARBITRUM ? arbitrumIcon : avalancheIcon} alt="Proof of Reserves" />
+                <img src={arbitrumIcon} alt="Proof of Reserves" />
                 <p>
                   <Trans>Proof of Reserves</Trans>
                 </p>
@@ -62,14 +62,12 @@ function AssetDropdown({ assetSymbol, assetInfo }: Props) {
         </Menu.Item>
         <Menu.Item>
           <>
-            {arbitrum && (
-              <ExternalLink href={arbitrum} className="asset-item">
+              <ExternalLink href={metertest} className="asset-item">
                 <img src={arbitrumIcon} alt="Open in explorer" />
                 <p>
                   <Trans>Open in Explorer</Trans>
                 </p>
               </ExternalLink>
-            )}
             {avalanche && (
               <ExternalLink href={avalanche} className="asset-item">
                 <img src={avalancheIcon} alt="Open in explorer" />

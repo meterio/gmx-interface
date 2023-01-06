@@ -27,7 +27,7 @@ import {
   isAddressZero,
   MAX_ALLOWED_LEVERAGE,
 } from "lib/legacy";
-import { ARBITRUM, getChainName, getConstant, IS_NETWORK_DISABLED } from "config/chains";
+import { getChainName, getConstant, IS_NETWORK_DISABLED } from "config/chains";
 import { createDecreaseOrder, useHasOutdatedUi } from "domain/legacy";
 import { getContract } from "config/contracts";
 import PositionRouter from "abis/PositionRouter.json";
@@ -766,7 +766,7 @@ export default function PositionSeller(props) {
       setPendingTxns,
       // for Arbitrum, sometimes the successMsg shows after the position has already been executed
       // hide the success message for Arbitrum as a workaround
-      hideSuccessMsg: chainId === ARBITRUM,
+      hideSuccessMsg: false,
     })
       .then(async (res) => {
         setFromValue("");

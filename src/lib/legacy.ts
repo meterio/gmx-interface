@@ -7,7 +7,7 @@ import useSWR from "swr";
 import OrderBookReader from "abis/OrderBookReader.json";
 import OrderBook from "abis/OrderBook.json";
 
-import { CHAIN_ID, ETH_MAINNET, getExplorerUrl, getRpcUrl } from "config/chains";
+import { CHAIN_ID, METERTEST, getExplorerUrl, getRpcUrl } from "config/chains";
 import { getServerBaseUrl } from "config/backend";
 import { getMostAbundantStableToken } from "domain/tokens";
 import { getTokenInfo } from "domain/tokens/utils";
@@ -877,9 +877,9 @@ export function useENS(address) {
   useEffect(() => {
     async function resolveENS() {
       if (address) {
-        const provider = new ethers.providers.JsonRpcProvider(getRpcUrl(ETH_MAINNET));
-        const name = await provider.lookupAddress(address.toLowerCase());
-        if (name) setENSName(name);
+        const provider = new ethers.providers.JsonRpcProvider(getRpcUrl(METERTEST));
+        // const name = await provider.lookupAddress(address.toLowerCase());
+        // if (name) setENSName(name);
       }
     }
     resolveENS();

@@ -11,7 +11,7 @@ import { useWeb3React } from "@web3-react/core";
 
 import APRLabel from "../APRLabel/APRLabel";
 import { HeaderLink } from "../Header/HeaderLink";
-import { ARBITRUM, AVALANCHE } from "config/chains";
+import { METERTEST } from "config/chains";
 import { switchNetwork } from "lib/wallets";
 import { useChainId } from "lib/chains";
 import ExternalLink from "components/ExternalLink/ExternalLink";
@@ -69,16 +69,12 @@ export default function TokenCard({ showRedirectModal, redirectPopupTimestamp })
             <Trans>GMX is the utility and governance token. Accrues 30% of the platform's generated fees.</Trans>
           </div>
           <div className="Home-token-card-option-apr">
-            <Trans>Arbitrum APR:</Trans> <APRLabel chainId={ARBITRUM} label="gmxAprTotal" />,{" "}
-            <Trans>Avalanche APR:</Trans> <APRLabel chainId={AVALANCHE} label="gmxAprTotal" key="AVALANCHE" />
+            <Trans>Arbitrum APR:</Trans> <APRLabel chainId={METERTEST} label="gmxAprTotal" />,{" "}
           </div>
           <div className="Home-token-card-option-action">
             <div className="buy">
-              <BuyLink to="/buy_gmx" className="default-btn" network={ARBITRUM}>
+              <BuyLink to="/buy_gmx" className="default-btn" network={METERTEST}>
                 <Trans>Buy on Arbitrum</Trans>
-              </BuyLink>
-              <BuyLink to="/buy_gmx" className="default-btn" network={AVALANCHE}>
-                <Trans>Buy on Avalanche</Trans>
               </BuyLink>
             </div>
             <ExternalLink href="https://gmxio.gitbook.io/gmx/tokenomics" className="default-btn read-more">
@@ -96,16 +92,12 @@ export default function TokenCard({ showRedirectModal, redirectPopupTimestamp })
             <Trans>GLP is the liquidity provider token. Accrues 70% of the platform's generated fees.</Trans>
           </div>
           <div className="Home-token-card-option-apr">
-            <Trans>Arbitrum APR:</Trans> <APRLabel chainId={ARBITRUM} label="glpAprTotal" key="ARBITRUM" />,{" "}
-            <Trans>Avalanche APR:</Trans> <APRLabel chainId={AVALANCHE} label="glpAprTotal" key="AVALANCHE" />
+            <Trans>Arbitrum APR:</Trans> <APRLabel chainId={METERTEST} label="glpAprTotal" key="METERTEST" />,{" "}
           </div>
           <div className="Home-token-card-option-action">
             <div className="buy">
-              <BuyLink to="/buy_glp" className="default-btn" network={ARBITRUM}>
+              <BuyLink to="/buy_glp" className="default-btn" network={METERTEST}>
                 <Trans>Buy on Arbitrum</Trans>
-              </BuyLink>
-              <BuyLink to="/buy_glp" className="default-btn" network={AVALANCHE}>
-                <Trans>Buy on Avalanche</Trans>
               </BuyLink>
             </div>
             <a

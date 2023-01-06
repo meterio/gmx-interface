@@ -7,7 +7,7 @@ import costIcon from "img/ic_cost.svg";
 import liquidityIcon from "img/ic_liquidity.svg";
 import totaluserIcon from "img/ic_totaluser.svg";
 
-import arbitrumIcon from "img/ic_arbitrum_96.svg";
+import metertestIcon from "img/ic_arbitrum_96.svg";
 import avaIcon from "img/ic_avalanche_96.svg";
 
 import statsIcon from "img/ic_stats.svg";
@@ -22,7 +22,7 @@ import { useUserStat } from "domain/legacy";
 import TokenCard from "components/TokenCard/TokenCard";
 import { Trans } from "@lingui/macro";
 import { HeaderLink } from "components/Header/HeaderLink";
-import { ARBITRUM, AVALANCHE } from "config/chains";
+import { METERTEST } from "config/chains";
 import { getServerUrl } from "config/backend";
 import { bigNumberify, formatAmount, numberWithCommas } from "lib/numbers";
 
@@ -54,73 +54,45 @@ export default function Home({ showRedirectModal, redirectPopupTimestamp }) {
   //   }
   // }
 
-  // ARBITRUM
+  // METERTEST
 
-  const arbitrumPositionStatsUrl = getServerUrl(ARBITRUM, "/position_stats");
-  const { data: arbitrumPositionStats } = useSWR([arbitrumPositionStatsUrl], {
+  const metertestPositionStatsUrl = getServerUrl(METERTEST, "/position_stats");
+  const { data: metertestPositionStats } = useSWR([metertestPositionStatsUrl], {
     fetcher: (...args) => fetch(...args).then((res) => res.json()),
   });
 
-  const arbitrumTotalVolumeUrl = getServerUrl(ARBITRUM, "/total_volume");
-  const { data: arbitrumTotalVolume } = useSWR([arbitrumTotalVolumeUrl], {
-    fetcher: (...args) => fetch(...args).then((res) => res.json()),
-  });
-
-  // AVALANCHE
-
-  const avalanchePositionStatsUrl = getServerUrl(AVALANCHE, "/position_stats");
-  const { data: avalanchePositionStats } = useSWR([avalanchePositionStatsUrl], {
-    fetcher: (...args) => fetch(...args).then((res) => res.json()),
-  });
-
-  const avalancheTotalVolumeUrl = getServerUrl(AVALANCHE, "/total_volume");
-  const { data: avalancheTotalVolume } = useSWR([avalancheTotalVolumeUrl], {
+  const metertestTotalVolumeUrl = getServerUrl(METERTEST, "/total_volume");
+  const { data: metertestTotalVolume } = useSWR([metertestTotalVolumeUrl], {
     fetcher: (...args) => fetch(...args).then((res) => res.json()),
   });
 
   // Total Volume
 
-  const arbitrumTotalVolumeSum = getTotalVolumeSum(arbitrumTotalVolume);
-  const avalancheTotalVolumeSum = getTotalVolumeSum(avalancheTotalVolume);
+  const metertestTotalVolumeSum = getTotalVolumeSum(metertestTotalVolume);
 
   let totalVolumeSum = bigNumberify(0);
-  if (arbitrumTotalVolumeSum && avalancheTotalVolumeSum) {
-    totalVolumeSum = totalVolumeSum.add(arbitrumTotalVolumeSum);
-    totalVolumeSum = totalVolumeSum.add(avalancheTotalVolumeSum);
+  if (metertestTotalVolumeSum) {
+    totalVolumeSum = totalVolumeSum.add(metertestTotalVolumeSum);
   }
 
   // Open Interest
 
   let openInterest = bigNumberify(0);
   if (
-    arbitrumPositionStats &&
-    arbitrumPositionStats.totalLongPositionSizes &&
-    arbitrumPositionStats.totalShortPositionSizes
+    metertestPositionStats &&
+    metertestPositionStats.totalLongPositionSizes &&
+    metertestPositionStats.totalShortPositionSizes
   ) {
-    openInterest = openInterest.add(arbitrumPositionStats.totalLongPositionSizes);
-    openInterest = openInterest.add(arbitrumPositionStats.totalShortPositionSizes);
-  }
-
-  if (
-    avalanchePositionStats &&
-    avalanchePositionStats.totalLongPositionSizes &&
-    avalanchePositionStats.totalShortPositionSizes
-  ) {
-    openInterest = openInterest.add(avalanchePositionStats.totalLongPositionSizes);
-    openInterest = openInterest.add(avalanchePositionStats.totalShortPositionSizes);
+    openInterest = openInterest.add(metertestPositionStats.totalLongPositionSizes);
+    openInterest = openInterest.add(metertestPositionStats.totalShortPositionSizes);
   }
 
   // user stat
-  const arbitrumUserStats = useUserStat(ARBITRUM);
-  const avalancheUserStats = useUserStat(AVALANCHE);
+  const metertestUserStats = useUserStat(METERTEST);
   let totalUsers = 0;
 
-  if (arbitrumUserStats && arbitrumUserStats.uniqueCount) {
-    totalUsers += arbitrumUserStats.uniqueCount;
-  }
-
-  if (avalancheUserStats && avalancheUserStats.uniqueCount) {
-    totalUsers += avalancheUserStats.uniqueCount;
+  if (metertestUserStats && metertestUserStats.uniqueCount) {
+    totalUsers += metertestUserStats.uniqueCount;
   }
 
   const LaunchExchangeButton = () => {
@@ -240,16 +212,16 @@ export default function Home({ showRedirectModal, redirectPopupTimestamp }) {
               <Trans>Available on your preferred network</Trans>
             </div>
             <div className="Home-cta-info__description">
-              <Trans>GMX is currently live on Arbitrum and Avalanche.</Trans>
+              <Trans>GMX is currently live on Metertest and Avalanche.</Trans>
             </div>
           </div>
           <div className="Home-cta-options">
-            <div className="Home-cta-option Home-cta-option-arbitrum">
+            <div className="Home-cta-option Home-cta-option-metertest">
               <div className="Home-cta-option-icon">
-                <img src={arbitrumIcon} alt="Arbitrum Icon" />
+                <img src={metertestIcon} alt="Metertest Icon" />
               </div>
               <div className="Home-cta-option-info">
-                <div className="Home-cta-option-title">Arbitrum</div>
+                <div className="Home-cta-option-title">Metertest</div>
                 <div className="Home-cta-option-action">
                   <LaunchExchangeButton />
                 </div>

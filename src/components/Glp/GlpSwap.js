@@ -49,7 +49,7 @@ import "./GlpSwap.css";
 import AssetDropdown from "pages/Dashboard/AssetDropdown";
 import SwapErrorModal from "./SwapErrorModal";
 import StatsTooltipRow from "../StatsTooltip/StatsTooltipRow";
-import { ARBITRUM, getChainName, IS_NETWORK_DISABLED } from "config/chains";
+import { getChainName, IS_NETWORK_DISABLED } from "config/chains";
 import { callContract, contractFetcher } from "lib/contracts";
 import { approveTokens, useInfoTokens } from "domain/tokens";
 import { useLocalStorageByChainId } from "lib/localStorage";
@@ -206,7 +206,7 @@ export default function GlpSwap(props) {
     }
   );
 
-  const { gmxPrice } = useGmxPrice(chainId, { arbitrum: chainId === ARBITRUM ? library : undefined }, active);
+  const { gmxPrice } = useGmxPrice(chainId, { arbitrum: undefined }, active);
 
   const rewardTrackersForStakingInfo = [stakedGlpTrackerAddress, feeGlpTrackerAddress];
   const { data: stakingInfo } = useSWR(
@@ -717,11 +717,7 @@ export default function GlpSwap(props) {
             <div className="App-card-title-mark">
               <div className="App-card-title-mark-icon">
                 <img src={glp40Icon} alt="glp40Icon" />
-                {chainId === ARBITRUM ? (
-                  <img src={arbitrum16Icon} alt="arbitrum16Icon" className="selected-network-symbol" />
-                ) : (
-                  <img src={avalanche16Icon} alt="avalanche16Icon" className="selected-network-symbol" />
-                )}
+                <img src={arbitrum16Icon} alt="arbitrum16Icon" className="selected-network-symbol" />
               </div>
               <div className="App-card-title-mark-info">
                 <div className="App-card-title-mark-title">GLP</div>

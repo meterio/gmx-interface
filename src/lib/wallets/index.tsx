@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import { InjectedConnector } from "@web3-react/injected-connector";
 import {
-  ARBITRUM,
   ARBITRUM_RPC_PROVIDERS,
-  ARBITRUM_TESTNET,
-  AVALANCHE,
   AVALANCHE_RPC_PROVIDERS,
+  METER_TEST_RPC_PROVIDERS,
   DEFAULT_CHAIN_ID,
   getChainName,
   MAINNET,
   NETWORK_METADATA,
-  SUPPORTED_CHAIN_IDS,
+  SUPPORTED_CHAIN_IDS, 
+  METERTEST
 } from "config/chains";
 import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
 import {
@@ -93,9 +92,7 @@ export const getWalletConnectConnector = () => {
 
   return new WalletConnectConnector({
     rpc: {
-      [AVALANCHE]: AVALANCHE_RPC_PROVIDERS[0],
-      [ARBITRUM]: ARBITRUM_RPC_PROVIDERS[0],
-      [ARBITRUM_TESTNET]: "https://rinkeby.arbitrum.io/rpc",
+      [METERTEST]: METER_TEST_RPC_PROVIDERS[0],
     },
     qrcode: true,
     chainId,
@@ -168,7 +165,7 @@ export function useEagerConnect(setActivatingConnector: (connector: any) => void
           setActivatingConnector(connector);
           await activate(connector, undefined, true);
         }
-      } catch (ex) {}
+      } catch (ex) { }
 
       setTried(true);
     })();

@@ -555,7 +555,7 @@ export default function StakeV1() {
   const readerAddress = getContract(CHAIN_ID, "Reader");
   const ammFactoryAddressV2 = getContract(CHAIN_ID, "AmmFactoryV2");
   const usdgAddress = getContract(CHAIN_ID, "USDG");
-  const gmtAddress = getContract(CHAIN_ID, "GMT");
+  // const gmtAddress = getContract(CHAIN_ID, "GMT");
   const xgmtAddress = getContract(CHAIN_ID, "XGMT");
   const autoAddress = getContract(CHAIN_ID, "AUTO");
   const nativeTokenAddress = getContract(CHAIN_ID, "NATIVE_TOKEN");
@@ -579,7 +579,7 @@ export default function StakeV1() {
 
   const tokens = [
     usdgAddress,
-    gmtAddress,
+    // gmtAddress,
     xgmtAddress,
     gmtUsdgPairAddress,
     xgmtUsdgPairAddress,
@@ -601,7 +601,7 @@ export default function StakeV1() {
   ];
 
   const pairTokens = [
-    gmtAddress,
+    // gmtAddress,
     usdgAddress,
     xgmtAddress,
     usdgAddress,
@@ -656,9 +656,11 @@ export default function StakeV1() {
   const processedData = getProcessedData(balanceData, supplyData, stakingData, totalStakedData, pairData, xgmtSupply);
 
   const buyXgmtUrl = `https://exchange.pancakeswap.finance/#/swap?outputCurrency=${xgmtAddress}&inputCurrency=${usdgAddress}`;
-  const buyGmtUrl = `https://exchange.pancakeswap.finance/#/swap?outputCurrency=${gmtAddress}&inputCurrency=${usdgAddress}`;
+  // const buyGmtUrl = `https://exchange.pancakeswap.finance/#/swap?outputCurrency=${gmtAddress}&inputCurrency=${usdgAddress}`;
+  const buyGmtUrl = ``;
 
-  const addGmtUsdgLpUrl = `https://exchange.pancakeswap.finance/#/add/${gmtAddress}/${usdgAddress}`;
+  // const addGmtUsdgLpUrl = `https://exchange.pancakeswap.finance/#/add/${gmtAddress}/${usdgAddress}`;
+  const addGmtUsdgLpUrl = ``;
   const addXgmtUsdgLpUrl = `https://exchange.pancakeswap.finance/#/add/${xgmtAddress}/${usdgAddress}`;
 
   const buyAutoUrl = `https://exchange.pancakeswap.finance/#/swap?outputCurrency=${autoAddress}&inputCurrency=${nativeTokenAddress}`;

@@ -3,7 +3,7 @@ import { Trans, t } from "@lingui/macro";
 import cx from "classnames";
 import { getCodeError, getReferralCodeTakenStatus, getSampleReferrarStat } from "./referralsHelper";
 import { useWeb3React } from "@web3-react/core";
-import { ARBITRUM } from "config/chains";
+import { METERTEST } from "config/chains";
 import { helperToast } from "lib/helperToast";
 import { useDebounce } from "lib/useDebounce";
 
@@ -129,7 +129,7 @@ export function AffiliateCodeForm({
     }
 
     if (takenStatus === "none" || takenStatus === "other") {
-      const ownerOnOtherNetwork = takenInfo[chainId === ARBITRUM ? "ownerAvax" : "ownerArbitrum"];
+      const ownerOnOtherNetwork = takenInfo["ownerArbitrum"];
       try {
         const tx = await handleCreateReferralCode(referralCode);
         if (callAfterSuccess) {

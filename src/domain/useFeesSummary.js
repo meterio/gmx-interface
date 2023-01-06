@@ -1,8 +1,8 @@
 import useSWR from "swr";
 import { arrayURLFetcher } from "lib/legacy";
-import { ARBITRUM, AVALANCHE } from "config/chains";
+import { METERTEST } from "config/chains";
 import { getServerUrl } from "config/backend";
-const ACTIVE_CHAIN_IDS = [ARBITRUM, AVALANCHE];
+const ACTIVE_CHAIN_IDS = [METERTEST];
 
 export default function useFeesSummary() {
   const { data: feesSummary } = useSWR(

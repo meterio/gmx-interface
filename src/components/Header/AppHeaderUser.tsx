@@ -12,7 +12,7 @@ import cx from "classnames";
 import { Trans } from "@lingui/macro";
 import NetworkDropdown from "../NetworkDropdown/NetworkDropdown";
 import LanguagePopupHome from "../NetworkDropdown/LanguagePopupHome";
-import { ARBITRUM, ARBITRUM_TESTNET, AVALANCHE, getChainName } from "config/chains";
+import { METERTEST, getChainName } from "config/chains";
 import { switchNetwork } from "lib/wallets";
 import { useChainId } from "lib/chains";
 
@@ -39,22 +39,16 @@ export function AppHeaderUser({
 
   const networkOptions = [
     {
-      label: getChainName(ARBITRUM),
-      value: ARBITRUM,
+      label: getChainName(METERTEST),
+      value: METERTEST,
       icon: "ic_arbitrum_24.svg",
       color: "#264f79",
-    },
-    {
-      label: getChainName(AVALANCHE),
-      value: AVALANCHE,
-      icon: "ic_avalanche_24.svg",
-      color: "#E841424D",
-    },
+    }
   ];
   if (isDevelopment()) {
     networkOptions.push({
-      label: getChainName(ARBITRUM_TESTNET),
-      value: ARBITRUM_TESTNET,
+      label: getChainName(METERTEST),
+      value: METERTEST,
       icon: "ic_arbitrum_24.svg",
       color: "#264f79",
     });

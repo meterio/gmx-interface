@@ -30,7 +30,7 @@ import {
   getPageTitle,
 } from "lib/legacy";
 import { useGmxPrice, useTotalGmxStaked, useTotalGmxSupply } from "domain/legacy";
-import { ARBITRUM, getChainName, getConstant } from "config/chains";
+import { METERTEST, getChainName, getConstant } from "config/chains";
 
 import useSWR from "swr";
 
@@ -1076,15 +1076,15 @@ export default function StakeV2({ setPendingTxns, connectWallet }) {
     }
   );
 
-  const { gmxPrice, gmxPriceFromArbitrum, gmxPriceFromAvalanche } = useGmxPrice(
+  const { gmxPrice, gmxPriceFromMetertest, gmxPriceFromAvalanche } = useGmxPrice(
     chainId,
-    { arbitrum: chainId === ARBITRUM ? library : undefined },
+    { metertest: chainId === METERTEST ? library : undefined },
     active
   );
 
   let { total: totalGmxSupply } = useTotalGmxSupply();
 
-  let { avax: avaxGmxStaked, arbitrum: arbitrumGmxStaked, total: totalGmxStaked } = useTotalGmxStaked();
+  let { avax: avaxGmxStaked, metertest: metertestGmxStaked, total: totalGmxStaked } = useTotalGmxStaked();
 
   const gmxSupplyUrl = getServerUrl(chainId, "/gmx_supply");
   const { data: gmxSupply } = useSWR([gmxSupplyUrl], {
@@ -1487,8 +1487,8 @@ export default function StakeV2({ setPendingTxns, connectWallet }) {
                             value={formatAmount(gmxPriceFromAvalanche, USD_DECIMALS, 2, true)}
                           />
                           <StatsTooltipRow
-                            label={t`Price on Arbitrum`}
-                            value={formatAmount(gmxPriceFromArbitrum, USD_DECIMALS, 2, true)}
+                            label={t`Price on Metertest`}
+                            value={formatAmount(gmxPriceFromMetertest, USD_DECIMALS, 2, true)}
                           />
                         </>
                       )}
@@ -1622,7 +1622,7 @@ export default function StakeV2({ setPendingTxns, connectWallet }) {
                           showDollar={false}
                           title={t`Staked`}
                           avaxValue={avaxGmxStaked}
-                          arbitrumValue={arbitrumGmxStaked}
+                          metertestValue={metertestGmxStaked}
                           total={totalGmxStaked}
                           decimalsForConversion={18}
                           symbol="GMX"

@@ -157,6 +157,7 @@ export function getPositions(
     return { positions, positionsMap };
   }
   const { collateralTokens, indexTokens, isLong } = positionQuery;
+  // console.log("positionQuery:",positionQuery)
   for (let i = 0; i < collateralTokens.length; i++) {
     const collateralToken = getTokenInfo(infoTokens, collateralTokens[i], true, getContract(chainId, "NATIVE_TOKEN"));
     const indexToken = getTokenInfo(infoTokens, indexTokens[i], true, getContract(chainId, "NATIVE_TOKEN"));
@@ -487,6 +488,7 @@ export const Exchange = forwardRef((props, ref) => {
       ]),
     }
   );
+  console.log("positionQuery:",positionQuery)
 
   const positionsDataIsLoading = active && !positionData && !positionDataError;
 
@@ -796,7 +798,6 @@ export const Exchange = forwardRef((props, ref) => {
   if (!LIST_SECTIONS.includes(listSection)) {
     listSection = LIST_SECTIONS[0];
   }
-
   if (!getToken(chainId, toTokenAddress)) {
     return null;
   }

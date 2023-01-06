@@ -19,7 +19,7 @@ import {
 } from "./referralsHelper";
 import { AffiliateCodeForm } from "./AddAffiliateCode";
 import TooltipWithPortal from "../Tooltip/TooltipWithPortal";
-import { AVALANCHE, getExplorerUrl } from "config/chains";
+import { getExplorerUrl } from "config/chains";
 import { helperToast } from "lib/helperToast";
 import { bigNumberify, formatAmount } from "lib/numbers";
 import { getNativeToken, getToken } from "config/tokens";
@@ -168,12 +168,12 @@ function AffiliatesStats({
                                   <div>
                                     <Trans>
                                       This code is not yet registered on{" "}
-                                      {chainId === AVALANCHE ? "Arbitrum" : "Avalanche"}, you will not receive rebates
+                                      Metertest, you will not receive rebates
                                       there.
                                       <br />
                                       <br />
                                       Switch your network to create this code on{" "}
-                                      {chainId === AVALANCHE ? "Arbitrum" : "Avalanche"}.
+                                      Metertest.
                                     </Trans>
                                   </div>
                                 )}
@@ -189,8 +189,8 @@ function AffiliatesStats({
                                   <div>
                                     <Trans>
                                       This code has been taken by someone else on{" "}
-                                      {chainId === AVALANCHE ? "Arbitrum" : "Avalanche"}, you will not receive rebates
-                                      from traders using this code on {chainId === AVALANCHE ? "Arbitrum" : "Avalanche"}
+                                      Metertest, you will not receive rebates
+                                      from traders using this code on Metertest
                                       .
                                     </Trans>
                                   </div>
